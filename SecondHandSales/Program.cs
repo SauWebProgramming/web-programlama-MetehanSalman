@@ -23,6 +23,30 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+	var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+	var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+	if (!await roleManager.RoleExistsAsync("Admin"))
+	{
+		await roleManager.CreateAsync(new IdentityRole("Admin"));
+	}
+	if (!await roleManager.RoleExistsAsync("Kullanici"))
+	{
+		await roleManager.CreateAsync(new IdentityRole("Kullanici"));
+	}
+
+	var adminEmail = "admin@admin.com";
+	var adminUser = await userManager.FindByEmailAsync(adminEmail);
+	if (adminUser == null)
+	{
+		adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+		await userManager.CreateAsync(adminUser, "Admin123!");
+		await userManager.AddToRoleAsync(adminUser, "Admin");
+	}
+}
+
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
