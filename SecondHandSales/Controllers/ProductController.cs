@@ -94,5 +94,102 @@ namespace SecondHandSales.Controllers
 
 			return View(model);
 		}
+
+		[HttpPost]
+		[Authorize]
+		public IActionResult Delete(int id)
+		{
+			var product = _productRepo.GetById(id);
+			if (product != null)
+			{
+				if (product.UserId == User.Identity?.Name || User.IsInRole("Admin"))
+				{
+					if (!string.IsNullOrEmpty(product.ImageUrl))
+					{
+						string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", product.ImageUrl);
+						if (System.IO.File.Exists(imagePath))
+						{
+							System.IO.File.Delete(imagePath);
+						}
+					}
+
+					_productRepo.Delete(id);
+					_productRepo.Save();
+				}
+			}
+			return RedirectToAction(nameof(Index));
+		}
+
+		// 5. Ürün Düzenleme Sayfasını Açma (GET)
+		public IActionResult Edit(int id)
+		{
+			var product = _productRepo.GetById(id);
+			// Eğer ürün yoksa veya kişi başkasının ilanını düzenlemeye çalışıyorsa engelle
+			if (product == null || (product.UserId != User.Identity?.Name && !User.IsInRole("Admin")))
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			var viewModel = new ProductCreateViewModel
+			{
+				Title = product.Title,
+				Description = product.Description,
+				Price = product.Price,
+				CategoryId = product.CategoryId,
+				CategoryList = _categoryRepo.GetAll().Select(c => new SelectListItem
+				{
+					Text = c.Name,
+					Value = c.Id.ToString()
+				})
+			};
+			return View(viewModel);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(int id, ProductCreateViewModel model)
+		{
+			var product = _productRepo.GetById(id);
+			if (product == null || (product.UserId != User.Identity?.Name && !User.IsInRole("Admin")))
+			{
+				return RedirectToAction(nameof(Index));
+			}
+
+			ModelState.Remove("ImageFile");
+
+			if (ModelState.IsValid)
+			{
+				if (model.ImageFile != null)
+				{
+					if (!string.IsNullOrEmpty(product.ImageUrl))
+					{
+						string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "images", product.ImageUrl);
+						if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
+					}
+
+					string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+					string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+					string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+					using (var fileStream = new FileStream(filePath, FileMode.Create))
+					{
+						await model.ImageFile.CopyToAsync(fileStream);
+					}
+					product.ImageUrl = uniqueFileName;
+				}
+
+				product.Title = model.Title;
+				product.Description = model.Description;
+				product.Price = model.Price;
+				product.CategoryId = model.CategoryId;
+
+				_productRepo.Update(product);
+				_productRepo.Save();
+
+				return RedirectToAction(nameof(Index));
+			}
+
+			model.CategoryList = _categoryRepo.GetAll().Select(c => new SelectListItem { Text = c.Name, Value = c.Id.ToString() });
+			return View(model);
+		}
 	}
 }

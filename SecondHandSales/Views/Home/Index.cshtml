@@ -1,8 +1,21 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4 fw-bold text-primary">İkinci El Dünyasına Hoş Geldiniz!</h1>
+    <p class="lead mt-3 text-muted">Aradığınız her şey burada, üstelik çok uygun fiyatlara. Hemen ilanlara göz atın veya kullanmadığınız eşyalarınızı saniyeler içinde satışa çıkarın.</p>
+    
+    <div class="mt-5">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg mx-2">Tüm İlanlara Göz At</a>
+        
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-success btn-lg mx-2">Hemen Ücretsiz Üye Ol</a>
+        }
+        else
+        {
+            <a asp-controller="Product" asp-action="Create" class="btn btn-success btn-lg mx-2">Yeni İlan Ekle</a>
+        }
+    </div>
 </div>

@@ -37,5 +37,14 @@ namespace SecondHandSales.Controllers
 			}
 			return View(category);
 		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Delete(int id)
+		{
+			_categoryRepo.Delete(id);
+			_categoryRepo.Save();
+			return RedirectToAction(nameof(Index));
+		}
 	}
 }

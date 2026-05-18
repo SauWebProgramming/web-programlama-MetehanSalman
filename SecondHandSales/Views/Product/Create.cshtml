@@ -52,4 +52,15 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+        selector: 'textarea#Description',
+        plugins: 'lists link',
+        toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist',
+        menubar: false,
+        height: 250
+        });
+    </script>
 }

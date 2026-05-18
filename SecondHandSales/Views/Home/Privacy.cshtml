@@ -1,6 +1,26 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Gizlilik Politikası";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container mt-5">
+    <h1 class="text-primary mb-4">@ViewData["Title"]</h1>
+
+    <div class="card shadow-sm p-4">
+        <p><strong>İkinci El Eşya Platformu</strong> olarak kullanıcılarımızın gizliliğine ve veri güvenliğine büyük önem veriyoruz.</p>
+        
+        <ul class="list-group list-group-flush mt-3">
+            <li class="list-group-item">
+                <strong>1. Veri Güvenliği:</strong> Sitemize kayıt olurken kullandığınız e-posta adresleri ve şifreleriniz, ASP.NET Core Identity altyapısı kullanılarak güçlü algoritmalarla şifrelenip veritabanımızda saklanmaktadır.
+            </li>
+            <li class="list-group-item">
+                <strong>2. Bilgi Paylaşımı:</strong> Kişisel bilgileriniz hiçbir şekilde üçüncü şahıs veya kurumlarla paylaşılmaz.
+            </li>
+            <li class="list-group-item">
+                <strong>3. İlan Sorumluluğu:</strong> Platforma yüklediğiniz ürün görselleri ve açıklamaları tüm ziyaretçilere açık olarak yayınlanır. İlan içeriklerinin yasal sorumluluğu ilanı ekleyen kullanıcıya aittir.
+            </li>
+            <li class="list-group-item text-muted fst-italic mt-2">
+                * Bu proje Web Programlama dersi kapsamında eğitim amaçlı geliştirilmiştir. Gerçek bir ticari platform değildir.
+            </li>
+        </ul>
+    </div>
+</div>
