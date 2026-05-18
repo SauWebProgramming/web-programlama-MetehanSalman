@@ -120,11 +120,9 @@ namespace SecondHandSales.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		// 5. Ürün Düzenleme Sayfasını Açma (GET)
 		public IActionResult Edit(int id)
 		{
 			var product = _productRepo.GetById(id);
-			// Eğer ürün yoksa veya kişi başkasının ilanını düzenlemeye çalışıyorsa engelle
 			if (product == null || (product.UserId != User.Identity?.Name && !User.IsInRole("Admin")))
 			{
 				return RedirectToAction(nameof(Index));
