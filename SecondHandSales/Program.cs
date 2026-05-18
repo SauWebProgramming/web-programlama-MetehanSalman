@@ -18,6 +18,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddScoped(typeof(SecondHandSales.Repositories.IGenericRepository<>), typeof(SecondHandSales.Repositories.GenericRepository<>));
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
