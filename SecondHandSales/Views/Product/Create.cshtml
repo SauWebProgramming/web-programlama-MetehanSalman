@@ -1,0 +1,55 @@
+﻿@model SecondHandSales.ViewModels.ProductCreateViewModel
+
+@{
+    ViewData["Title"] = "Yeni İlan Ekle";
+}
+
+<div class="container mt-4">
+    <h2>Yeni İlan Ekle</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Kategori</label>
+                    <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-select">
+                        <option disabled selected>-- Lütfen Kategori Seçin --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fiyat (TL)</label>
+                    <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ürün Resmi</label>
+                    <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">İlanı Kaydet</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

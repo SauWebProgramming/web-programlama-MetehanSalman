@@ -1,0 +1,39 @@
+﻿@model IEnumerable<SecondHandSales.Models.Product>
+
+@{
+    ViewData["Title"] = "İkinci El Ürünler";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>İkinci El Ürün İlanları</h2>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Product" asp-action="Create" class="btn btn-success">Yeni İlan Ekle</a>
+        }
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="~/images/@item.ImageUrl" class="card-img-top" alt="@item.Title" style="height: 200px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/300x200?text=Resim+Yok" class="card-img-top" alt="Resim Yok">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text text-truncate">@item.Description</p>
+                        <h4 class="text-primary">@item.Price.ToString("C")</h4>
+                        <p class="text-muted small">Ekleyen: @item.UserId</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
